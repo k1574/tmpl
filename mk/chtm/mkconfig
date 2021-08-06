@@ -1,0 +1,8 @@
+<$MKINCDIR/config
+
+PP = pp
+CHTM = chtm
+
+INDIR = in
+OUTDIR = out
+

@@ -1,0 +1,44 @@
+<mkconfig
+
+MKSHELL = rc
+
+OUTHTMFILES = `{eval '
+	for( i in `{goblin ls -r 100 '$INDIR'}){
+		~ $i *.htm && {echo $i | sed -e s!^'$INDIR'!'$OUTDIR'!}
+	}
+'}
+
+OUTPPFILES  = `{eval '
+	for( i in `{goblin ls -r 100 '$INDIR'}){
+		~ $i *.css *.js && {echo $i | sed -e s!^'$INDIR'!'$OUTDIR'!} }
+'}
+
+TGT = $OUTHTMFILES $OUTPPFILES
+
+all:VQ: build
+build:V: $INDIR $OUTDIR $TGT
+
+$INDIR $OUTDIR :
+	mkdir -p $target
+
+$OUTDIR/%.htm : $INDIR/%.htm
+	mkdir -p `{dirname $target}
+	$PP < $prereq | $CHTM > $target
+
+$OUTDIR/%.css : $INDIR/%.css
+	mkdir -p `{dirname $target}
+	$PP < $prereq > $target
+
+$OUTDIR/%.js : $INDIR/%.js
+	mkdir -p `{dirname $target}
+	$PP < $prereq > $target
+
+tree:V:
+	goblin ls -r 100
+
+run:V: clean
+	goblin ls $INDIR | entr mk	
+
+clean:V:
+	rm -f $TGT
+
