@@ -1,4 +1,5 @@
+<{= color red}>
 .html {
-	color : red ;
+	color : <{$ color}> ;
 	background-color : black ;
 }

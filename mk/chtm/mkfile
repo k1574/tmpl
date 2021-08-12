@@ -36,8 +36,18 @@ $OUTDIR/%.js : $INDIR/%.js
 tree:V:
 	goblin ls -r 100
 
-run:V: clean
-	goblin ls $INDIR | entr mk	
+run:V: clean run-$MKSHELL 
+run-rc:V:
+	while(true){
+		if(goblin ls -r 100 $INDIR | entr -d mk)
+			exit
+	}
+run-sh:V:
+	while true ; do
+		if goblin ls -r 100 $INDIR | entr -d mk ; then
+			exit
+		fi
+	done
 
 clean:V:
 	rm -f $TGT
